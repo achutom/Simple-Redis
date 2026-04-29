@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import src.network.ClientHandler;
 
-public class Redis {
+public class Main {
     public static void main(String args[]) throws IOException {
         ClientHandler clientHandler = new ClientHandler();
 
