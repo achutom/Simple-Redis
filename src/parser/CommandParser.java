@@ -1,19 +1,26 @@
 package src.parser;
 
-import java.util.concurrent.ConcurrentHashMap;
+import src.storage.DataStore;
 
 public class CommandParser {
-    public String parseCode(String code[], String response, ConcurrentHashMap<String, String> storage) {
-        if (code[0].equalsIgnoreCase("SET") && code.length >= 3) {
-            String key = code[1];
-            String value = code[2];
-            storage.put(key, value);
-            response = "New var " + key + " has been set.";
-        } else if (code[0].equalsIgnoreCase("GET") && code.length >= 2) {
-            String key = code[1];
-            response = storage.getOrDefault(key, "undefined");
-        } else {
-            response = "ERROR";
+    public String parseCode(String code[], String response, DataStore dataStore) {
+        switch (code[0].toUpperCase()) {
+            case "SET":
+                response = dataStore.set(code[1], code[2]);
+                break;
+            case "GET":
+                response = dataStore.get(code[1]);
+                break;
+            case "DEL":
+                response = dataStore.del(code[1]);
+                break;
+            case "EXISTS":
+                response = dataStore.exists(code[1]);
+                break;
+
+            default:
+                response = "ERROR: UNKNOWN COMMAND";
+                break;
         }
 
         return response;

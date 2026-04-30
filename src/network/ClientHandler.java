@@ -13,16 +13,16 @@ import src.storage.DataStore;
 public class ClientHandler implements Runnable {
 
     private Socket client;
-    private DataStore dataStore;
     String line;
 
-    public ClientHandler(Socket client, DataStore dataStore) {
+    public ClientHandler(Socket client) {
         this.client = client;
-        this.dataStore = dataStore;
     }
 
     public void handleClient() throws IOException {
         CommandParser commandParser = new CommandParser();
+
+        DataStore dataStore = new DataStore();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
@@ -36,7 +36,7 @@ public class ClientHandler implements Runnable {
 
             String response = "";
 
-            response = commandParser.parseCode(code, response, dataStore.storage);
+            response = commandParser.parseCode(code, response, dataStore);
 
             // Send response to client
             writer.write(response);
