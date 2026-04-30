@@ -1,14 +1,13 @@
 package src;
 
 import java.io.IOException;
-
-import src.network.ClientHandler;
+import src.server.RedisServer;
 
 public class Main {
     public static void main(String args[]) throws IOException {
-        ClientHandler clientHandler = new ClientHandler();
+        RedisServer redisServer = new RedisServer();
 
-        clientHandler.handleClient();
+        redisServer.start();
 
         System.out.println("Client has disconnected");
     }

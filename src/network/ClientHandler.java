@@ -5,26 +5,27 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 import src.parser.CommandParser;
-import src.server.RedisServer;
 import src.storage.DataStore;
 
-public class ClientHandler {
+public class ClientHandler implements Runnable {
 
-    // public BufferedReader reader;
-    // public BufferedWriter writer;
+    private Socket client;
+    private DataStore dataStore;
     String line;
 
-    public void handleClient() throws IOException {
-        RedisServer redisServer = new RedisServer();
+    public ClientHandler(Socket client, DataStore dataStore) {
+        this.client = client;
+        this.dataStore = dataStore;
+    }
 
+    public void handleClient() throws IOException {
         CommandParser commandParser = new CommandParser();
 
-        DataStore dataStore = new DataStore();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(redisServer.client.getInputStream()));
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(redisServer.client.getOutputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
         System.out.println("Waiting for input...");
 
@@ -41,6 +42,15 @@ public class ClientHandler {
             writer.write(response);
             writer.newLine();
             writer.flush();
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            handleClient();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

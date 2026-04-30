@@ -1,9 +1,9 @@
 package src.parser;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandParser {
-    public String parseCode(String code[], String response, HashMap<String, String> storage) {
+    public String parseCode(String code[], String response, ConcurrentHashMap<String, String> storage) {
         if (code[0].equalsIgnoreCase("SET") && code.length >= 3) {
             String key = code[1];
             String value = code[2];

@@ -4,33 +4,34 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import src.network.ClientHandler;
+import src.storage.DataStore;
+
 public class RedisServer {
 
-    int port; // Listening port
-    public ServerSocket server;
-    public Socket client;
+    private int port = 5000;
+    private ServerSocket server;
+    private DataStore dataStore;
 
     public RedisServer() throws IOException {
-        port = 5000;
-        server = createServer();
-        client = createClient(server);
-    }
+        server = new ServerSocket(port);
+        dataStore = new DataStore();
 
-    // Creates a socket server.
-    public ServerSocket createServer() throws IOException {
-        ServerSocket server = new ServerSocket(port);
         System.out.println("Server started on port " + port + "!");
-        System.out.println("Waiting for a connection...");
-
-        return server;
     }
 
-    // Accepts a client.
-    public Socket createClient(ServerSocket server) throws IOException {
-        Socket client = server.accept();
-        System.out.println("Client is connected.");
+    public void start() throws IOException {
 
-        return client;
+        while (true) {
+            System.out.println("Waiting for a connection...");
+
+            Socket client = server.accept();
+            System.out.println("Client connected: " + client.getInetAddress());
+
+            ClientHandler handler = new ClientHandler(client, dataStore);
+
+            Thread thread = new Thread(handler);
+            thread.start();
+        }
     }
-
 }

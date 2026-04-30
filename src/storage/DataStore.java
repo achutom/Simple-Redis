@@ -1,11 +1,11 @@
 package src.storage;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DataStore {
-    public HashMap<String, String> storage;
+    public ConcurrentHashMap<String, String> storage;
 
     public DataStore() {
-        storage = new HashMap<>();
+        storage = new ConcurrentHashMap<>();
     }
 }
