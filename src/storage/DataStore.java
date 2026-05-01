@@ -36,4 +36,15 @@ public class DataStore {
         return "No such entry found.";
     }
 
+    // KEYS Method
+    public String keys() {
+        return storage.keySet().toString();
+    }
+
+    // CLEAR Method
+    public String clear() {
+        storage.clear();
+        return "Cleared all entries in database.";
+    }
+
 }
